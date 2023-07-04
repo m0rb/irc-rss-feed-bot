@@ -392,7 +392,7 @@ def _regain_nick(irc: miniirc.IRC, explanation: str) -> None:
         Bot.RECENT_NICK_REGAIN_TIMES.append(current_time)
         attempt = len(Bot.RECENT_NICK_REGAIN_TIMES)
         log.warning(f"{msg} The configured nick will be regained in attempt {attempt}/{max_recent_nick_regains}.")
-        irc.msg("nickserv", "REGAIN", config.INSTANCE["nick"], os.environ["IRC_PASSWORD"])
+        irc.msg("nickserv", "IDENTIFY", config.INSTANCE["nick"], os.environ["IRC_PASSWORD"])
     else:
         log.error(f"{msg} All {max_recent_nick_regains} recent nick regain attempts are exhausted.")
         Bot.EXITCODE_QUEUE.put(1)

@@ -10,7 +10,7 @@ from .util.list import ensure_list
 from .util.textwrap import shorten_to_bytes_width
 
 log = logging.getLogger(__name__)
-
+config.runtime.identity = ""
 
 class RawFeedEntry(dict):
     """Raw feed entry.
