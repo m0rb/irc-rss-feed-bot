@@ -191,7 +191,7 @@ class Bot:
         while self._active:  # pylint: disable=too-many-nested-blocks
             feed = channel_queue.get()
             log.debug(f"Dequeued {feed}.")
-            min_channel_idle_time = feed.reader.min_channel_idle_time
+            min_channel_idle_time = 0
             log.debug(f"The minimum required channel idle time for {feed} is {timedelta_desc(min_channel_idle_time)}.")
             try:
                 if not feed.is_postable:
@@ -202,9 +202,7 @@ class Bot:
                             if not outgoing_msg_lock.acquire(blocking=False):
                                 log.info(f"Waiting to acquire outgoing message lock to post {feed}.")
                                 outgoing_msg_lock.acquire()
-                            last_incoming_msg_time = Bot.CHANNEL_LAST_INCOMING_MSG_TIMES[channel]
-                            time_elapsed_since_last_ic_msg = time.monotonic() - last_incoming_msg_time
-                            sleep_time = max(0, min_channel_idle_time - time_elapsed_since_last_ic_msg)
+                            sleep_time = 0
                             if sleep_time == 0:
                                 break  # Lock will be released later after posting messages.
                             outgoing_msg_lock.release()  # Releasing lock before sleeping.
