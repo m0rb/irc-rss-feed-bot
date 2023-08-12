@@ -1,3 +1,14 @@
+# Note: This is a slightly modified fork of irc-rss-feed-bot
+Modifications include NickServ IDENTIFY facilities so it can function on most irc networks
+and ircd server PASS functions so it can login to private IRC servers or BNCs.
+
+Also of note, there's been a few tweaks to the weights and balances of post frequency and 
+channel activity tracker.
+
+This fork is currently powering `worldnewsbot` on 2600net
+
+---
+
 # irc-rss-feed-bot
 **irc-rss-feed-bot** is a dockerized Python 3.11 and IRC based RSS/Atom and scraped HTML/JSON/CSV feed posting bot.
 It essentially posts the entries of feeds in IRC channels, one entry per message.
