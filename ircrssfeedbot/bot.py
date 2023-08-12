@@ -378,6 +378,11 @@ class Bot:
 # Refs: https://tools.ietf.org/html/rfc1459 https://modern.ircdocs.horse
 
 
+def _server_pass(irc: miniirc.IRC, explanation: str) -> None:
+    log.warning(f"The server wants a PASS.")
+    irc.quote("PASS", os.environ["IRCD_PASSWORD"], force=True)
+
+
 def _regain_nick(irc: miniirc.IRC, explanation: str) -> None:
     max_recent_nick_regains_age = 30
     max_recent_nick_regains = 3
@@ -401,6 +406,12 @@ def _handle_433_err_nicknameinuse(irc: miniirc.IRC, hostmask: Tuple[str, str, st
     log.info("Received ERR_NICKNAMEINUSE (433): hostmask=%s args=%s", hostmask, args)
     # Ref: https://stackoverflow.com/a/67560902/
     _regain_nick(irc, "The server sent event ERR_NICKNAMEINUSE (433) reporting the current nick is already in use.")
+
+
+@miniirc.Handler(464, colon=False)
+def _handle_464_err_servpass(irc: miniirc.IRC, hostmask: Tuple[str, str, str], args: List[str]) -> None:
+    log.info("Received ERR_PASSWDMISMATCH (464): hostmask=%s args=%s", hostmask, args)
+    _server_pass(irc, "The server sent event ERR_PASSWDMISMATCH (464) and wants the client to send a PASS.")
 
 
 @miniirc.Handler(332, colon=False)
